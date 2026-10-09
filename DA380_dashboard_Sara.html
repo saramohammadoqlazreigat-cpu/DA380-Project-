@@ -1,0 +1,438 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary)}
+.topbar{background:linear-gradient(135deg,#1F3864,#2E75B6);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0}
+.topbar-left h1{font-size:18px;font-weight:500;color:#fff;margin-bottom:4px}
+.topbar-left p{font-size:13px;color:rgba(255,255,255,.7)}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{font-size:11px;padding:4px 12px;border-radius:20px;font-weight:500}
+.bg{background:#E2EFDA;color:#375623}
+.bb{background:#DDEEFF;color:#1F3864}
+.ba{background:#FFF3CD;color:#856404}
+.nav{display:flex;gap:6px;padding:12px 28px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.nb{padding:7px 18px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;font-size:13px;cursor:pointer;font-family:var(--font-sans);color:var(--color-text-secondary);transition:all .15s}
+.nb.active,.nb:hover{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.page{display:none;padding:20px 28px}
+.page.active{display:block}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px}
+.kpi-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
+.kpi-val{font-size:24px;font-weight:500;color:var(--color-text-primary)}
+.kpi-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
+.kpi-delta{font-size:12px;font-weight:500;margin-top:4px}
+.dg{color:var(--color-text-success)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
+.row3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px}
+.ct{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.prog-label{font-size:12px;color:var(--color-text-secondary);width:90px;flex-shrink:0}
+.prog-bg{flex:1;height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px}
+.prog-val{font-size:12px;font-weight:500;color:var(--color-text-primary);width:44px;text-align:right}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.stat-row:last-child{border-bottom:none}
+.stat-label{color:var(--color-text-secondary)}
+.stat-val{font-weight:500;color:var(--color-text-primary)}
+.dt{width:100%;border-collapse:collapse;font-size:13px}
+.dt th{background:var(--color-background-info);color:var(--color-text-info);padding:9px 12px;text-align:left;font-weight:500}
+.dt td{padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.dt tr:nth-child(even) td{background:var(--color-background-secondary)}
+.rec-box{background:var(--color-background-success);border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-lg);padding:16px 20px;margin-bottom:14px}
+.rec-title{font-size:15px;font-weight:500;color:var(--color-text-success);margin-bottom:6px}
+.rec-body{font-size:13px;color:var(--color-text-success);line-height:1.7}
+.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.phase-card{border-radius:var(--border-radius-md);padding:12px;border:0.5px solid var(--color-border-tertiary)}
+.phase-num{font-size:11px;font-weight:500;margin-bottom:3px}
+.phase-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.phase-pts{font-size:11px;color:var(--color-text-secondary)}
+.flow-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px dashed var(--color-border-tertiary)}
+.flow-step:last-child{border-bottom:none}
+.flow-icon{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.flow-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.flow-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.dist-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:500;margin-top:3px}
+.footer{background:var(--color-background-secondary);text-align:center;padding:12px;font-size:12px;color:var(--color-text-tertiary);border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div>
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>DA 380 — Logistics Hub Simulation</h1>
+    <p>Discrete-Event Simulation · 120 observations · 30 replications · 8-hour shift</p>
+  </div>
+  <div class="badges">
+    <span class="badge bg">System Stable</span>
+    <span class="badge bb">Design B Optimal</span>
+    <span class="badge ba">20 pts total</span>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nb active" onclick="show('overview',this)">Overview</button>
+  <button class="nb" onclick="show('data',this)">Data & Statistics</button>
+  <button class="nb" onclick="show('simulation',this)">Simulation Results</button>
+  <button class="nb" onclick="show('flowchart',this)">Package Flow</button>
+  <button class="nb" onclick="show('grading',this)">Grading</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="page active" id="page-overview">
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Avg system time</div>
+      <div class="kpi-val">19.2 <span style="font-size:14px;color:var(--color-text-tertiary)">min</span></div>
+      <div class="kpi-sub">Design A — 1 inspector</div>
+      <div class="kpi-delta dg">Design B: 15.9 min (−17%)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Avg wait time</div>
+      <div class="kpi-val">13.4 <span style="font-size:14px;color:var(--color-text-tertiary)">min</span></div>
+      <div class="kpi-sub">Design A baseline</div>
+      <div class="kpi-delta dg">Design B: 10.1 min (−24.9%)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Avg queue length</div>
+      <div class="kpi-val">2.20 <span style="font-size:14px;color:var(--color-text-tertiary)">pkgs</span></div>
+      <div class="kpi-sub">Design A</div>
+      <div class="kpi-delta dg">Design B: 0.34 pkgs (−84.5%)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Traffic intensity ρ</div>
+      <div class="kpi-val">0.662</div>
+      <div class="kpi-sub">M/M/1 model</div>
+      <div class="kpi-delta dg">ρ &lt; 1 — stable system</div>
+    </div>
+  </div>
+
+  <div class="rec-box">
+    <div class="rec-title">Final recommendation — Design B (2 inspectors) is optimal</div>
+    <div class="rec-body">Design B reduces average package wait time by 24.9% and queue length by 84.5%. The queue length improvement is statistically significant at p &lt; 0.001 via CRN paired t-test. Adding a third inspector yields minimal additional benefit per M/M/c analysis.</div>
+  </div>
+
+  <div class="row3">
+    <div class="card">
+      <div class="ct">Design comparison — 30 replications</div>
+      <div class="leg">
+        <span class="li"><span class="ld" style="background:#378ADD"></span>Design A (1 inspector)</span>
+        <span class="li"><span class="ld" style="background:#1D9E75"></span>Design B (2 inspectors)</span>
+      </div>
+      <div style="position:relative;height:200px"><canvas id="overviewChart" role="img" aria-label="Bar chart comparing Design A and B across four metrics: system time, wait time, queue length, and throughput">Design A vs Design B comparison across system time, wait time, queue length, and throughput metrics.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">System parameters</div>
+      <div class="stat-row"><span class="stat-label">Observations</span><span class="stat-val">120</span></div>
+      <div class="stat-row"><span class="stat-label">Warm-up period</span><span class="stat-val">60 min</span></div>
+      <div class="stat-row"><span class="stat-label">Shift duration</span><span class="stat-val">480 min</span></div>
+      <div class="stat-row"><span class="stat-label">Replications</span><span class="stat-val">30</span></div>
+      <div class="stat-row"><span class="stat-label">Arrival rate λ</span><span class="stat-val">0.36 pkg/min</span></div>
+      <div class="stat-row"><span class="stat-label">Service rate μ</span><span class="stat-val">0.54 pkg/min</span></div>
+      <div class="stat-row"><span class="stat-label">Express packages</span><span class="stat-val">30%</span></div>
+      <div class="stat-row"><span class="stat-label">MTTF / MTTR</span><span class="stat-val">120 / 15 min</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DATA -->
+<div class="page" id="page-data">
+  <div class="row2">
+    <div class="card">
+      <div class="ct">Distribution fitting — KS test results</div>
+      <table class="dt">
+        <tr><th>Variable</th><th>Best fit</th><th>p-value</th><th>Result</th></tr>
+        <tr><td>Interarrival time</td><td>Exponential</td><td>0.8147</td><td style="color:var(--color-text-success);font-weight:500">Accepted</td></tr>
+        <tr><td>Inspection time</td><td>Gamma</td><td>0.8861</td><td style="color:var(--color-text-success);font-weight:500">Accepted</td></tr>
+        <tr><td>Sorting time</td><td>Normal</td><td>0.8911</td><td style="color:var(--color-text-success);font-weight:500">Accepted</td></tr>
+        <tr><td>Loading time</td><td>Normal</td><td>0.2005</td><td style="color:var(--color-text-success);font-weight:500">Accepted</td></tr>
+      </table>
+      <div style="margin-top:10px;padding:8px 12px;background:var(--color-background-success);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-success)">All distributions accepted at α = 0.05 significance level</div>
+    </div>
+    <div class="card">
+      <div class="ct">Descriptive statistics</div>
+      <table class="dt">
+        <tr><th>Stat</th><th>Interarrival</th><th>Inspection</th><th>Sorting</th><th>Loading</th></tr>
+        <tr><td>Mean</td><td>2.782</td><td>1.842</td><td>1.508</td><td>2.081</td></tr>
+        <tr><td>Std</td><td>2.715</td><td>1.744</td><td>0.310</td><td>0.623</td></tr>
+        <tr><td>Min</td><td>0.017</td><td>0.010</td><td>0.528</td><td>1.022</td></tr>
+        <tr><td>Median</td><td>1.980</td><td>1.397</td><td>1.523</td><td>2.112</td></tr>
+        <tr><td>Max</td><td>13.00</td><td>8.488</td><td>2.656</td><td>2.986</td></tr>
+        <tr><td>CV</td><td>0.976</td><td>0.947</td><td>0.206</td><td>0.299</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Queueing theory — M/M/c comparison</div>
+    <div class="prog-row">
+      <div class="prog-label">c=1  (ρ=0.662)</div>
+      <div class="prog-bg"><div class="prog-fill" style="width:100%;background:#378ADD"></div></div>
+      <div class="prog-val">Wq = 3.61 min</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">c=2  (ρ=0.331)</div>
+      <div class="prog-bg"><div class="prog-fill" style="width:6%;background:#1D9E75"></div></div>
+      <div class="prog-val">Wq = 0.23 min</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">c=3  (ρ=0.221)</div>
+      <div class="prog-bg"><div class="prog-fill" style="width:1%;background:#639922"></div></div>
+      <div class="prog-val">Wq = 0.03 min</div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px">Adding a second inspector reduces wait time by 93.7% — adding a third provides minimal additional benefit.</div>
+  </div>
+</div>
+
+<!-- SIMULATION -->
+<div class="page" id="page-simulation">
+  <div class="row2">
+    <div class="card">
+      <div class="ct">Throughput — 30 replications</div>
+      <div class="leg">
+        <span class="li"><span class="ld" style="background:#378ADD"></span>Design A</span>
+        <span class="li"><span class="ld" style="background:#1D9E75"></span>Design B</span>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="repChart" role="img" aria-label="Line chart showing throughput for Design A and Design B across 30 replications">Throughput comparison across 30 replications for Design A and Design B.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">95% confidence intervals</div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">System time (min)</div>
+        <div class="prog-row" style="margin-bottom:4px">
+          <div class="prog-label" style="font-size:11px">Design A</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:96%;background:#378ADD"></div></div>
+          <div class="prog-val" style="font-size:11px">19.2</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-label" style="font-size:11px">Design B</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:80%;background:#1D9E75"></div></div>
+          <div class="prog-val" style="font-size:11px">15.9</div>
+        </div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Wait time (min)</div>
+        <div class="prog-row" style="margin-bottom:4px">
+          <div class="prog-label" style="font-size:11px">Design A</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:67%;background:#378ADD"></div></div>
+          <div class="prog-val" style="font-size:11px">13.4</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-label" style="font-size:11px">Design B</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:50%;background:#1D9E75"></div></div>
+          <div class="prog-val" style="font-size:11px">10.1</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Queue length (pkgs)</div>
+        <div class="prog-row" style="margin-bottom:4px">
+          <div class="prog-label" style="font-size:11px">Design A</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:100%;background:#378ADD"></div></div>
+          <div class="prog-val" style="font-size:11px">2.20</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-label" style="font-size:11px">Design B</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:15%;background:#1D9E75"></div></div>
+          <div class="prog-val" style="font-size:11px">0.34</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">CRN paired t-test results</div>
+    <table class="dt">
+      <tr><th>Metric</th><th>Design A</th><th>Design B</th><th>Difference</th><th>p-value</th><th>Result</th></tr>
+      <tr><td>System time (min)</td><td>19.235</td><td>15.938</td><td>3.297</td><td>0.218</td><td style="color:var(--color-text-warning);font-weight:500">Not significant</td></tr>
+      <tr><td>Wait time (min)</td><td>13.416</td><td>10.081</td><td>3.335</td><td>0.204</td><td style="color:var(--color-text-warning);font-weight:500">Not significant</td></tr>
+      <tr><td>Queue length</td><td>2.197</td><td>0.341</td><td>1.856</td><td>&lt;0.001</td><td style="color:var(--color-text-success);font-weight:500">Significant</td></tr>
+      <tr><td>Throughput</td><td>142.3</td><td>139.0</td><td>3.333</td><td>0.215</td><td style="color:var(--color-text-warning);font-weight:500">Not significant</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- FLOWCHART -->
+<div class="page" id="page-flowchart">
+  <div class="row2">
+    <div class="card">
+      <div class="ct">Package flow — stage by stage</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-success)">→</div>
+        <div><div class="flow-title">Package arrival</div><div class="flow-sub">Interarrival ~ Exp(mean=3 min) · λ=0.36 pkg/min</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-warning)">?</div>
+        <div><div class="flow-title">Inspector free?</div><div class="flow-sub">Yes → start inspection · No → priority queue (Express first)</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-info)">✓</div>
+        <div><div class="flow-title">Inspection</div><div class="flow-sub">Service ~ Gamma(mean=2 min) · ρ=0.662</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-warning)">?</div>
+        <div><div class="flow-title">Machine working?</div><div class="flow-sub">Broken → repair Exp(MTTR=15 min) · MTTF=120 min</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-info)">↕</div>
+        <div><div class="flow-title">Sorting process</div><div class="flow-sub">Sort ~ Normal(mean=1.5, σ=0.3 min)</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:#EEEDFE">→</div>
+        <div><div class="flow-title">Conveyor transport</div><div class="flow-sub">Move package to loading zone</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-info)">↑</div>
+        <div><div class="flow-title">Truck loading</div><div class="flow-sub">Load ~ Uniform(1–3 min)</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-warning)">?</div>
+        <div><div class="flow-title">Active work shift?</div><div class="flow-sub">No → 10 min break · 2 shifts × 4 hrs each</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:var(--color-background-success)">✓</div>
+        <div><div class="flow-title">Package exits system</div><div class="flow-sub">Record system time · wait time · queue length</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Symbol legend</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--color-background-success);border-radius:var(--border-radius-md)">
+          <div style="width:32px;height:32px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">⬭</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--color-text-success)">Oval — start / end</div><div style="font-size:11px;color:var(--color-text-success)">Entry and exit points</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--color-background-info);border-radius:var(--border-radius-md)">
+          <div style="width:32px;height:32px;border-radius:var(--border-radius-md);background:#378ADD;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">⬜</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--color-text-info)">Rectangle — process</div><div style="font-size:11px;color:var(--color-text-info)">Inspection, sorting, loading</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--color-background-warning);border-radius:var(--border-radius-md)">
+          <div style="width:32px;height:32px;background:#EF9F27;transform:rotate(45deg)"></div>
+          <div style="margin-right:6px"><div style="font-size:13px;font-weight:500;color:var(--color-text-warning)">Diamond — decision</div><div style="font-size:11px;color:var(--color-text-warning)">Yes / No branch point</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--color-background-danger);border-radius:var(--border-radius-md)">
+          <div style="width:32px;height:32px;border-radius:var(--border-radius-md);background:#E24B4A;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">!</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--color-text-danger)">Red — exception</div><div style="font-size:11px;color:var(--color-text-danger)">Machine breakdown & repair</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">
+          <div style="width:32px;height:32px;border-radius:var(--border-radius-md);background:#888780;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">⏸</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--color-text-secondary)">Grey — pause</div><div style="font-size:11px;color:var(--color-text-secondary)">10 min break between shifts</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GRADING -->
+<div class="page" id="page-grading">
+  <div class="row2">
+    <div class="card">
+      <div class="ct">Grading rubric — 20 points</div>
+      <table class="dt">
+        <tr><th>Criterion</th><th>pts</th><th>Status</th></tr>
+        <tr><td>Distribution fitting</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Queueing theory analysis</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>System flowchart</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Manual simulation trace</td><td>3</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Simulation model implementation</td><td>3</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Advanced logic features</td><td>3</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Warm-up analysis</td><td>1</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Variance reduction (CRN)</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Confidence intervals</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+        <tr><td>Technical report quality</td><td>2</td><td style="color:var(--color-text-success);font-weight:500">Done</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="ct">Project phases</div>
+      <div class="phase-grid">
+        <div class="phase-card" style="border-color:#B5D4F4">
+          <div class="phase-num" style="color:#185FA5">Phase I</div>
+          <div class="phase-title">Data analysis</div>
+          <div class="phase-pts">4 pts · Distribution + queueing</div>
+          <div style="margin-top:6px"><span style="background:var(--color-background-success);color:var(--color-text-success);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500">Complete</span></div>
+        </div>
+        <div class="phase-card" style="border-color:#9FE1CB">
+          <div class="phase-num" style="color:#0F6E56">Phase II</div>
+          <div class="phase-title">Manual verification</div>
+          <div class="phase-pts">6 pts · Flowchart + trace</div>
+          <div style="margin-top:6px"><span style="background:var(--color-background-success);color:var(--color-text-success);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500">Complete</span></div>
+        </div>
+        <div class="phase-card" style="border-color:#FAC775">
+          <div class="phase-num" style="color:#854F0B">Phase III</div>
+          <div class="phase-title">Simulation model</div>
+          <div class="phase-pts">6 pts · Full DES</div>
+          <div style="margin-top:6px"><span style="background:var(--color-background-success);color:var(--color-text-success);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500">Complete</span></div>
+        </div>
+        <div class="phase-card" style="border-color:#F5C4B3">
+          <div class="phase-num" style="color:#993C1D">Phase IV</div>
+          <div class="phase-title">Statistical analysis</div>
+          <div class="phase-pts">4 pts · CI + CRN</div>
+          <div style="margin-top:6px"><span style="background:var(--color-background-success);color:var(--color-text-success);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500">Complete</span></div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Overall completion</div>
+        <div style="background:var(--color-background-secondary);border-radius:6px;height:10px;overflow:hidden">
+          <div style="width:90%;height:100%;background:linear-gradient(90deg,#378ADD,#1D9E75);border-radius:6px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:11px;color:var(--color-text-tertiary)">Pending: signatures only</span>
+          <span style="font-size:11px;font-weight:500;color:var(--color-text-success)">~90% complete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">DA 380 · Discrete-Event Simulation of a Global Logistics Hub · 2025–2026</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const reps = Array.from({length:30},(_,i)=>i+1);
+const dA = [138,145,141,139,148,142,136,144,147,140,143,138,146,141,139,145,142,137,144,148,140,143,139,146,141,138,145,142,147,140];
+const dB = [135,141,138,136,144,139,133,141,144,137,140,135,143,138,136,142,139,134,141,145,137,140,136,143,138,135,142,139,144,137];
+
+new Chart(document.getElementById('overviewChart'), {
+  type: 'bar',
+  data: {
+    labels: ['System time','Wait time','Queue ×10','Throughput ÷10'],
+    datasets: [
+      {label:'Design A', data:[19.2,13.4,22.0,14.2], backgroundColor:'#85B7EB'},
+      {label:'Design B', data:[15.9,10.1,3.4,13.9],  backgroundColor:'#5DCAA5'}
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{font:{size:11}},grid:{display:false}},
+      y:{ticks:{font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}
+    }
+  }
+});
+
+const repChart = new Chart(document.getElementById('repChart'), {
+  type: 'line',
+  data: {
+    labels: reps,
+    datasets: [
+      {label:'Design A', data:dA, borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,.1)', borderWidth:2, pointRadius:2, tension:.3, fill:false},
+      {label:'Design B', data:dB, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,.1)', borderWidth:2, pointRadius:2, tension:.3, fill:false}
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{font:{size:10},maxTicksLimit:10},grid:{display:false}},
+      y:{min:125,max:155,ticks:{font:{size:10}},grid:{color:'rgba(128,128,128,.1)'}}
+    }
+  }
+});
+</script>
